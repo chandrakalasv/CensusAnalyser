@@ -31,10 +31,12 @@ public class CensusAnalyser {
                 IndiaCensusCSV censusData = censusCSVIterator.next();
             }
             return namOfEateries;
-
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        }catch (RuntimeException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.WRONG_HEADER);
         }
     }
 }
