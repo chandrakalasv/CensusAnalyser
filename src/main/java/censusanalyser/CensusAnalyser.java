@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.List;
 
 public class CensusAnalyser {
 
@@ -39,4 +40,21 @@ public class CensusAnalyser {
                     CensusAnalyserException.ExceptionType.WRONG_HEADER);
         }
     }
+
+    public int loadIndiaStateCodeData(String csvFilePath) throws Exception {
+        Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
+        CsvToBeanBuilder<IndiaStateCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+        csvToBeanBuilder.withType(IndiaStateCSV.class);
+        csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
+        CsvToBean<IndiaStateCSV> csvToBean = csvToBeanBuilder.build();
+        Iterator<IndiaStateCSV> stateCSVIterator = csvToBean.iterator();
+        int namOfEateries = 0;
+        while (stateCSVIterator.hasNext()) {
+            namOfEateries++;
+            IndiaStateCSV censusData = stateCSVIterator.next();
+        }
+        return namOfEateries;
+    }
 }
+
+
