@@ -41,19 +41,24 @@ public class CensusAnalyser {
         }
     }
 
-    public int loadIndiaStateCodeData(String csvFilePath) throws Exception {
-        Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
-        CsvToBeanBuilder<IndiaStateCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-        csvToBeanBuilder.withType(IndiaStateCSV.class);
-        csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-        CsvToBean<IndiaStateCSV> csvToBean = csvToBeanBuilder.build();
-        Iterator<IndiaStateCSV> stateCSVIterator = csvToBean.iterator();
-        int namOfEateries = 0;
-        while (stateCSVIterator.hasNext()) {
-            namOfEateries++;
-            IndiaStateCSV censusData = stateCSVIterator.next();
+    public int loadIndiaStateCodeData(String csvFilePath) throws CensusAnalyserException {
+        try {
+            Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
+            CsvToBeanBuilder<IndiaStateCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+            csvToBeanBuilder.withType(IndiaStateCSV.class);
+            csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
+            CsvToBean<IndiaStateCSV> csvToBean = csvToBeanBuilder.build();
+            Iterator<IndiaStateCSV> stateCSVIterator = csvToBean.iterator();
+            int namOfEateries = 0;
+            while (stateCSVIterator.hasNext()) {
+                namOfEateries++;
+                IndiaStateCSV censusData = stateCSVIterator.next();
+            }
+            return namOfEateries;
+        } catch (IOException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }
-        return namOfEateries;
     }
 }
 
