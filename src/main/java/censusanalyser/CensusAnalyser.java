@@ -42,6 +42,11 @@ public class CensusAnalyser {
     }
 
     public int loadIndiaStateCodeData(String csvFilePath) throws CensusAnalyserException {
+        String[] splitPath = csvFilePath.split("[.]");
+        String extensionType = splitPath[splitPath.length - 1];
+        if (!extensionType.equals("csv")) {
+            throw new CensusAnalyserException("Invalid Extension", CensusAnalyserException.ExceptionType.CENSUS_TYPE_PROBLEM);
+        }
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
             CsvToBeanBuilder<IndiaStateCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
